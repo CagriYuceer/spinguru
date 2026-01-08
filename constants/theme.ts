@@ -1,53 +1,67 @@
 /**
  * Below are the colors that are used in the app. The colors are defined in the light and dark mode.
- * There are many other ways to style your app. For example, [Nativewind](https://www.nativewind.dev/), [Tamagui](https://tamagui.dev/), [unistyles](https://reactnativeunistyles.vercel.app), etc.
  */
 
 import { Platform } from 'react-native';
 
-const tintColorLight = '#0a7ea4';
-const tintColorDark = '#fff';
+const Palette = {
+  gold: '#FFD700',
+  goldDim: '#B8860B',
+  deepIndigo: '#1A1A2E',
+  midnightBlue: '#16213E',
+  neonPurple: '#B829EA',
+  neonGreen: '#00FF9D',
+  neonRed: '#FF0055',
+  glassWhite: 'rgba(255, 255, 255, 0.1)',
+  glassBlack: 'rgba(0, 0, 0, 0.6)',
+  textWhite: '#FFFFFF',
+  textGray: '#A1A1AA',
+};
 
 export const Colors = {
   light: {
+    // We are forcing Dark Mode for this app mostly, but keeping light mapping just in case
     text: '#11181C',
     background: '#fff',
-    tint: tintColorLight,
+    tint: Palette.gold,
     icon: '#687076',
     tabIconDefault: '#687076',
-    tabIconSelected: tintColorLight,
+    tabIconSelected: Palette.gold,
+    primary: Palette.deepIndigo, 
   },
   dark: {
-    text: '#ECEDEE',
-    background: '#151718',
-    tint: tintColorDark,
+    text: Palette.textWhite,
+    textDim: Palette.textGray,
+    background: Palette.deepIndigo,
+    tint: Palette.gold,
     icon: '#9BA1A6',
     tabIconDefault: '#9BA1A6',
-    tabIconSelected: tintColorDark,
+    tabIconSelected: Palette.gold,
+    card: Palette.glassBlack,
+    border: 'rgba(255, 215, 0, 0.2)', // Subtle Gold Border
+    success: Palette.neonGreen,
+    danger: Palette.neonRed,
+    warning: '#FFCC00',
+    info: '#29B6F6',
+    gradients: {
+        background: [Palette.deepIndigo, '#0F0F1A'], // Deep vertical gradient
+        card: ['rgba(30, 30, 40, 0.7)', 'rgba(20, 20, 30, 0.8)'],
+        gold: [Palette.gold, Palette.goldDim],
+    }
   },
 };
 
 export const Fonts = Platform.select({
   ios: {
-    /** iOS `UIFontDescriptorSystemDesignDefault` */
-    sans: 'system-ui',
-    /** iOS `UIFontDescriptorSystemDesignSerif` */
-    serif: 'ui-serif',
-    /** iOS `UIFontDescriptorSystemDesignRounded` */
-    rounded: 'ui-rounded',
-    /** iOS `UIFontDescriptorSystemDesignMonospaced` */
-    mono: 'ui-monospace',
+    sku: 'System', 
+    sans: 'System', 
+    serif: 'System', 
+    mono: 'System',
   },
   default: {
-    sans: 'normal',
-    serif: 'serif',
-    rounded: 'normal',
+    sku: 'sans-serif',
+    sans: 'sans-serif',
+    serif: 'serif', 
     mono: 'monospace',
-  },
-  web: {
-    sans: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif",
-    serif: "Georgia, 'Times New Roman', serif",
-    rounded: "'SF Pro Rounded', 'Hiragino Maru Gothic ProN', Meiryo, 'MS PGothic', sans-serif",
-    mono: "SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace",
   },
 });

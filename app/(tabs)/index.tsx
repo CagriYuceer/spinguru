@@ -1,98 +1,137 @@
-import { Image } from 'expo-image';
-import { Platform, StyleSheet } from 'react-native';
+import { Heatmap } from '@/components/Heatmap';
+import { GlassCard } from '@/components/ui/GlassCard';
+import { ThemedBackground } from '@/components/ui/ThemedBackground';
+import { Colors } from '@/constants/theme';
+import { Bell, Flame } from 'lucide-react-native';
+import React from 'react';
+import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
-import { HelloWave } from '@/components/hello-wave';
-import ParallaxScrollView from '@/components/parallax-scroll-view';
-import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
-import { Link } from 'expo-router';
+const MOCK_HEATMAP = Array.from({ length: 20 }).map((_, i) => ({
+  id: String(i),
+  value: Math.floor(Math.random() * 100) + 40,
+  label: `Slot ${i + 1}`,
+}));
 
-export default function HomeScreen() {
+export default function DashboardScreen() {
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-      headerImage={
-        <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
-        />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-        <HelloWave />
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
-          Press{' '}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({
-              ios: 'cmd + d',
-              android: 'cmd + m',
-              web: 'F12',
-            })}
-          </ThemedText>{' '}
-          to open developer tools.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <Link href="/modal">
-          <Link.Trigger>
-            <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-          </Link.Trigger>
-          <Link.Preview />
-          <Link.Menu>
-            <Link.MenuAction title="Action" icon="cube" onPress={() => alert('Action pressed')} />
-            <Link.MenuAction
-              title="Share"
-              icon="square.and.arrow.up"
-              onPress={() => alert('Share pressed')}
-            />
-            <Link.Menu title="More" icon="ellipsis">
-              <Link.MenuAction
-                title="Delete"
-                icon="trash"
-                destructive
-                onPress={() => alert('Delete pressed')}
-              />
-            </Link.Menu>
-          </Link.Menu>
-        </Link>
+    <ThemedBackground>
+      <ScrollView contentContainerStyle={styles.scrollContent}>
 
-        <ThemedText>
-          {`Tap the Explore tab to learn more about what's included in this starter app.`}
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          {`When you're ready, run `}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText> to get a fresh{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> directory. This will move the current{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
-      </ThemedView>
-    </ParallaxScrollView>
+        {/* Header */}
+        <View style={styles.header}>
+          <View>
+            <Text style={styles.greeting}>Good Evening,</Text>
+            <Text style={styles.username}>HighRoller99</Text>
+          </View>
+          <TouchableOpacity style={styles.iconBtn}>
+            <Bell color={Colors.dark.text} size={24} />
+          </TouchableOpacity>
+        </View>
+
+        {/* Quick Stats */}
+        <View style={styles.statsRow}>
+          <GlassCard style={{ flex: 1, marginRight: 8 }}>
+            <View style={styles.statItem}>
+              <Text style={styles.statLabel}>Session EV</Text>
+              <Text style={[styles.statValue, { color: Colors.dark.success }]}>+12.5%</Text>
+            </View>
+          </GlassCard>
+          <GlassCard style={{ flex: 1, marginLeft: 8 }}>
+            <View style={styles.statItem}>
+              <Text style={styles.statLabel}>RTP Trend</Text>
+              <Text style={[styles.statValue, { color: Colors.dark.danger }]}>-2.4%</Text>
+            </View>
+          </GlassCard>
+        </View>
+
+        {/* Heatmap */}
+        <GlassCard intensity={40}>
+          <Heatmap data={MOCK_HEATMAP} />
+        </GlassCard>
+
+        {/* Hot Slots (Horizontal) */}
+        <Text style={styles.sectionTitle}>🔥 Today's Hot Slots</Text>
+        <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.horizontalScroll}>
+          {[1, 2, 3, 4].map(i => (
+            <GlassCard key={i} style={styles.horizontalCard} variant="highlight">
+              <Flame color={Colors.dark.tint} size={32} />
+              <Text style={styles.cardTitle}>Sweet Bonanza</Text>
+              <Text style={styles.cardSubtitle}>RTP: 98.2%</Text>
+            </GlassCard>
+          ))}
+        </ScrollView>
+        <View style={{ height: 80 }} />
+      </ScrollView>
+    </ThemedBackground>
   );
 }
 
 const styles = StyleSheet.create({
-  titleContainer: {
+  scrollContent: {
+    padding: 16,
+    paddingTop: 60,
+  },
+  header: {
     flexDirection: 'row',
+    justifyContent: 'space-between',
     alignItems: 'center',
-    gap: 8,
+    marginBottom: 24,
   },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
+  greeting: {
+    color: Colors.dark.textDim,
+    fontSize: 14,
   },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: 'absolute',
+  username: {
+    color: Colors.dark.text,
+    fontSize: 24,
+    fontWeight: 'bold',
   },
+  iconBtn: {
+    padding: 8,
+    backgroundColor: 'rgba(255,255,255,0.1)',
+    borderRadius: 20,
+  },
+  statsRow: {
+    flexDirection: 'row',
+    marginBottom: 16,
+  },
+  statItem: {
+    alignItems: 'center',
+  },
+  statLabel: {
+    color: Colors.dark.textDim,
+    fontSize: 12,
+  },
+  statValue: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginTop: 4,
+  },
+  sectionTitle: {
+    color: Colors.dark.text,
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginTop: 24,
+    marginBottom: 12,
+  },
+  horizontalScroll: {
+    overflow: 'visible',
+  },
+  horizontalCard: {
+    width: 140,
+    height: 160,
+    marginRight: 16,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  cardTitle: {
+    color: Colors.dark.text,
+    fontWeight: 'bold',
+    marginTop: 12,
+  },
+  cardSubtitle: {
+    color: Colors.dark.success,
+    marginTop: 4,
+    fontWeight: '900',
+  }
 });
